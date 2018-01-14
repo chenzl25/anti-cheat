@@ -25,7 +25,7 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 	{
 		ASTNodeImporter importer = new FunctionImporter();
 		importNode(importer, node);
-		System.out.println(astEncoder.encode(node));
+		System.out.println(astEncoder.encodeToString(node));
 	}
 
 	public void visit(ClassDefStatement node)
