@@ -1,0 +1,50 @@
+<Modeling and Discovering Vulnerabilities with Code Property Graphs>joern是根据2014年的这篇论文来实现的。它是可以用于生成ast,cfg,ddg,pdg,cdg的工具
+主要用java编写，利用了antlr这个parser generator来进行C和C++的语法分析生成抽象语法树，再将其转换成cdg,ddg,pdg,cdg等图，
+最终导入图数据库neo4j,可以使用gremlin来进行数据库查询，作者还提供了一些可以从数据库中生成直观图像的工具。
+
+项目地址：
+https://github.com/octopus-platform/joern
+文档地址：
+http://joern.readthedocs.io/en/latest/index.html
+
+根据文档下载安装好对应的软件
+joern,neo4j,joern-tools,python-joern
+需要注意的点:
+neo4j需要使用2.1.8版本和pip install py2neo==2.0的gremlin对应到python接口的查询语言版本匹配
+
+使用方法：
+生成需要分析目录c_code的数据库目录文件myc.db
+java -jar joern-0.3.1/bin/joern.jar c_code -outdir neo4j-community-2.1.8/data/myc.db
+
+调整neo4j的配置文件neo4j-community-2.1.8/conf/neo4j-server.properties中的
+org.neo4j.server.database.location=data/myc.db
+和neo4j-community-2.1.8/conf/neo4j.properties中的
+allow_store_upgrade=true
+
+运行数据库
+./neo4j-community-2.1.8/bin/neo4j console
+可以到localhost:7474进行web页面的查询
+还可以通过python或命令行来操作
+
+
+joern-list-files 命令可以列出当前数据库所有文件节点信息
+joern-list-funcs 命令可以列出当前数据库所有函数的信息
+
+echo 'getFunctionsByName("main").id' | joern-lookup -g | tail -n 1 | joern-plot-ast > foo.dot;
+dot -Tsvg foo.dot -o ast.svg; eog ast.svg
+命令可以生成main函数的AST图
+
+echo 'getFunctionsByName("main").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -cfg > cfg.dot;
+dot -Tsvg cfg.dot -o cfg.svg; eog cfg.svg
+命令可以生成main函数的CFG图
+
+
+echo 'getFunctionsByName("main").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -ddg -cfg > ddgAndCfg.dot;
+dot -Tsvg ddgAndCfg.dot -o ddgAndCfg.svg; eog ddgAndCfg.svg
+命令可以生成main函数的DFG图
+
+
+程序修改复用：
+可以通过对程序中AST，CFG，等相关代码修改进行编码输入到神经网络中。
+
+

@@ -1,0 +1,2 @@
+2017-10-22 07:21:54.379+0000 INFO  [API] Setting startup timeout to: 120000ms based on -1
+Detected incorrectly shut down database, performing recovery..
