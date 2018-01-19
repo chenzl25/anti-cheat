@@ -25,13 +25,6 @@ import cfg.nodes.CFGErrorNode;
 import cfg.nodes.CFGNode;
 import cfg.nodes.InfiniteForNode;
 
-import java.util.Set;
-import java.util.HashSet;
-import graphutils.PostorderIterator;
-import cfg.*;
-import cfg.nodes.*;
-
-
 public class CCFGFactory extends CFGFactory
 {
 	private static StructuredFlowVisitor structuredFlowVisitior = new StructuredFlowVisitor();
@@ -57,30 +50,6 @@ public class CCFGFactory extends CFGFactory
 			{
 				System.err.println("warning: unresolved continue statement");
 				fixContinueStatement(function, function.getErrorNode());
-			}
-
-			// remove trival nodes from cfg
-			Set<CFGNode> nodeSet = new HashSet<CFGNode>();
-			Set<CFGNode> toRemoveSet = new HashSet<CFGNode>();
-			PostorderIterator<CFGNode, CFGEdge> postorderIterator 
-				= new PostorderIterator<CFGNode, CFGEdge>(function, function.getEntryNode());
-			while (postorderIterator.hasNext()) {
-				CFGNode itNode = postorderIterator.next();
-				nodeSet.add(itNode);
-			}
-			int count = 0;
-			for (CFGNode cfgNode : function.getVertices()) {
-				if (!nodeSet.contains(cfgNode)) {
-					System.out.println(cfgNode);
-					toRemoveSet.add(cfgNode);
-				}
-			}
-			for (CFGNode cfgNode : toRemoveSet) {
-				if (cfgNode instanceof ASTNodeContainer) {
-					ASTNodeContainer astNodeContainer = (ASTNodeContainer) cfgNode;
-					astNodeContainer.getASTNode().unmarkAsCFGNode();
-				}
-				function.removeVertex(cfgNode);
 			}
 
 			return function;
