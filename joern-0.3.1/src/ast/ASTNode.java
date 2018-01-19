@@ -136,6 +136,10 @@ public class ASTNode
 		isInCFG = true;
 	}
 
+	public void unmarkAsCFGNode() {
+		isInCFG = false;
+	}
+
 	public boolean isInCFG()
 	{
 		return isInCFG;

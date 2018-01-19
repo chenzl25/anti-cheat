@@ -1,4 +1,4 @@
 *.svg
 *.dot
 joern-0.3.1/bin/
-neo4j-community-2.1.8/data/myc.db/
+neo4j-community-2.1.8/data

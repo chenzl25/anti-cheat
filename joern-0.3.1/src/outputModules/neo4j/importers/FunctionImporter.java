@@ -15,6 +15,9 @@ import databaseNodes.EdgeTypes;
 import databaseNodes.FileDatabaseNode;
 import databaseNodes.FunctionDatabaseNode;
 
+import encoder.ASTEncoder;
+import encoder.CFGEncoder;
+
 // Stays alive while importing a function into
 // the database
 
@@ -36,6 +39,12 @@ public class FunctionImporter extends ASTNodeImporter
 			function.initialize(node);
 			addFunctionToDatabase(function);
 			linkFunctionToFileNode(function, curFile);
+
+			// encode
+			ASTEncoder astEncoder = new ASTEncoder();
+			CFGEncoder cfgEncoder = new CFGEncoder();
+			System.out.println(astEncoder.encodeToString(function.getASTRoot()));
+			System.out.println(cfgEncoder.encodeToString(function.getCFG()));
 		}
 		catch (RuntimeException ex)
 		{

@@ -15,17 +15,14 @@ import ast.functionDef.FunctionDef;
 import ast.statements.IdentifierDeclStatement;
 import ast.walking.ASTNodeVisitor;
 import databaseNodes.EdgeTypes;
-import encoder.ASTEncoder;
 // Stays alive during the lifetime of the program
 
 public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 {
-	ASTEncoder astEncoder = new ASTEncoder();
 	public void visit(FunctionDef node)
 	{
 		ASTNodeImporter importer = new FunctionImporter();
 		importNode(importer, node);
-		System.out.println(astEncoder.encodeToString(node));
 	}
 
 	public void visit(ClassDefStatement node)
