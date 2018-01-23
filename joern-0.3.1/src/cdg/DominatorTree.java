@@ -20,6 +20,7 @@ public class DominatorTree<V>
 	private HashMap<V, V> dominators;
 	private HashMap<V, Set<V>> dominanceFrontiers;
 	private HashMap<V, Integer> postorderEnumeration;
+	private V startNode;
 
 	private DominatorTree()
 	{
@@ -32,6 +33,10 @@ public class DominatorTree<V>
 			AbstractTwoWayGraph<V, E> graph, V startNode)
 	{
 		return new DominatorTreeCreator<V, E>(graph, startNode).create();
+	}
+
+	public V getStartNode() {
+		return startNode;
 	}
 
 	public Collection<V> getVertices()
@@ -242,6 +247,7 @@ public class DominatorTree<V>
 
 		private void initializeDominatorTree()
 		{
+			dominatorTree.startNode = startNode;
 			dominatorTree.addVertex(startNode);
 			dominatorTree.setDominator(startNode, startNode);
 		}

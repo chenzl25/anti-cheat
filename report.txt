@@ -49,3 +49,21 @@ dot -Tsvg ddgAndCfg.dot -o ddgAndCfg.svg; eog ddgAndCfg.svg
 
 
 rjzj5r5j22fmivwn
+
+echo 'getFunctionsByName("fun").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -all > all.dot;
+dot -Tsvg all.dot -o all.svg; eog all.svg
+
+
+echo 'getFunctionsByName("fun").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -dom > dom.dot;
+dot -Tsvg dom.dot -o dom.svg; eog dom.svg
+
+ [-cfg] [-dfg] [-ddg] [-cdg] [-dom] [-all]
+
+ echo 'getFunctionsByName("fun").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -dfg > dfg.dot;
+dot -Tsvg dfg.dot -o dfg.svg; eog dfg.svg
+
+ echo 'getFunctionsByName("fun").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -ddg > ddg.dot;
+dot -Tsvg ddg.dot -o ddg.svg; eog ddg.svg
+
+ echo 'getFunctionsByName("fun").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -cdg > cdg.dot;
+dot -Tsvg cdg.dot -o cdg.svg; eog cdg.svg

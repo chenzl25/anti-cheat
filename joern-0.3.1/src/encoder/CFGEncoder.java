@@ -13,11 +13,13 @@ public class CFGEncoder {
 
 	private Integer totalNodeCount = 0;
 	private Integer totalEdgeCount = 0;
+	private Integer inDegree0NodeCount = 0;
 	private Integer inDegree1NodeCount = 0;
 	private Integer inDegree2NodeCount = 0;
 	private Integer inDegree3NodeCount = 0;
 	private Integer inDegree4NodeCount = 0;
 	private Integer inDegree5NodeCount = 0;
+	private Integer outDegree0NodeCount = 0;
 	private Integer outDegree1NodeCount = 0;
 	private Integer outDegree2NodeCount = 0;
 	private Integer outDegree3NodeCount = 0;
@@ -27,11 +29,13 @@ public class CFGEncoder {
 	private void init() {
 		totalNodeCount = 0;
 		totalEdgeCount = 0;
+		inDegree0NodeCount = 0;
 		inDegree1NodeCount = 0;
 		inDegree2NodeCount = 0;
 		inDegree3NodeCount = 0;
 		inDegree4NodeCount = 0;
 		inDegree5NodeCount = 0;
+		outDegree0NodeCount = 0;
 		outDegree1NodeCount = 0;
 		outDegree2NodeCount = 0;
 		outDegree3NodeCount = 0;
@@ -71,6 +75,9 @@ public class CFGEncoder {
 		while (pit.hasNext()) {
 			CFGNode node = pit.next();
 			switch (inputCFG.outDegree(node)) {
+				case 0:
+					outDegree0NodeCount++;
+					break;
 				case 1:
 					outDegree1NodeCount++;
 					break;
@@ -87,6 +94,9 @@ public class CFGEncoder {
 					outDegree5NodeCount++;
 			}
 			switch (inputCFG.inDegree(node)) {
+				case 0:
+					inDegree0NodeCount++;
+					break;
 				case 1:
 					inDegree1NodeCount++;
 					break;
@@ -122,11 +132,13 @@ public class CFGEncoder {
 		HashMap<String, Integer> m = new HashMap<String, Integer>();
 		m.put("totalNodeCount", totalNodeCount);
 		m.put("totalEdgeCount", totalNodeCount);
+		m.put("inDegree0NodeCount", inDegree1NodeCount);
 		m.put("inDegree1NodeCount", inDegree1NodeCount);
 		m.put("inDegree2NodeCount", inDegree2NodeCount);
 		m.put("inDegree3NodeCount", inDegree3NodeCount);
 		m.put("inDegree4NodeCount", inDegree4NodeCount);
 		m.put("inDegree5NodeCount", inDegree5NodeCount);
+		m.put("outDegree0NodeCount", outDegree1NodeCount);
 		m.put("outDegree1NodeCount", outDegree1NodeCount);
 		m.put("outDegree2NodeCount", outDegree2NodeCount);
 		m.put("outDegree3NodeCount", outDegree3NodeCount);
@@ -140,11 +152,13 @@ public class CFGEncoder {
 		s.append("<CFGEncoder>\n");
 		s.append("  totalNodeCount = " + totalNodeCount.toString() + '\n');
 		s.append("  totalEdgeCount = " + totalEdgeCount.toString() + '\n');
+		s.append("  inDegree0NodeCount = " + inDegree1NodeCount.toString() + '\n');
 		s.append("  inDegree1NodeCount = " + inDegree1NodeCount.toString() + '\n');
 		s.append("  inDegree2NodeCount = " + inDegree2NodeCount.toString() + '\n');
 		s.append("  inDegree3NodeCount = " + inDegree3NodeCount.toString() + '\n');
 		s.append("  inDegree4NodeCount = " + inDegree4NodeCount.toString() + '\n');
 		s.append("  inDegree5NodeCount = " + inDegree5NodeCount.toString() + '\n');
+		s.append("  outDegree0NodeCount = " + outDegree1NodeCount.toString() + '\n');
 		s.append("  outDegree1NodeCount = " + outDegree1NodeCount.toString() + '\n');
 		s.append("  outDegree2NodeCount = " + outDegree2NodeCount.toString() + '\n');
 		s.append("  outDegree3NodeCount = " + outDegree3NodeCount.toString() + '\n');

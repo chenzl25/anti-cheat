@@ -100,7 +100,6 @@ public class ASTDefUseAnalyzer
 	{
 
 		String nodeType = astProvider.getTypeAsString();
-
 		switch (nodeType)
 		{
 			case "AssignmentExpr":

@@ -17,6 +17,7 @@ import databaseNodes.FunctionDatabaseNode;
 
 import encoder.ASTEncoder;
 import encoder.CFGEncoder;
+import encoder.CDGEncoder;
 
 // Stays alive while importing a function into
 // the database
@@ -43,8 +44,10 @@ public class FunctionImporter extends ASTNodeImporter
 			// encode
 			ASTEncoder astEncoder = new ASTEncoder();
 			CFGEncoder cfgEncoder = new CFGEncoder();
+			CDGEncoder cdgEncoder = new CDGEncoder();
 			System.out.println(astEncoder.encodeToString(function.getASTRoot()));
 			System.out.println(cfgEncoder.encodeToString(function.getCFG()));
+			System.out.println(cdgEncoder.encodeToString(function.getCDG()));
 		}
 		catch (RuntimeException ex)
 		{
