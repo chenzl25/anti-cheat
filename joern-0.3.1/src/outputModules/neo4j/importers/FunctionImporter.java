@@ -62,6 +62,8 @@ public class FunctionImporter extends ASTNodeImporter
 	{
 
 		addMainNode(function);
+		System.out.println("mainNodeId = ");
+		System.out.println(getMainNodeId());
 
 		astImporter.setCurrentFunction(function);
 		cfgImporter.setCurrentFunction(function);
