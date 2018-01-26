@@ -42,12 +42,12 @@ public class FunctionImporter extends ASTNodeImporter
 			linkFunctionToFileNode(function, curFile);
 
 			// encode
-			ASTEncoder astEncoder = new ASTEncoder();
-			CFGEncoder cfgEncoder = new CFGEncoder();
-			CDGEncoder cdgEncoder = new CDGEncoder();
-			System.out.println(astEncoder.encodeToString(function.getASTRoot()));
-			System.out.println(cfgEncoder.encodeToString(function.getCFG()));
-			System.out.println(cdgEncoder.encodeToString(function.getCDG()));
+			// ASTEncoder astEncoder = new ASTEncoder();
+			// CFGEncoder cfgEncoder = new CFGEncoder();
+			// CDGEncoder cdgEncoder = new CDGEncoder();
+			// System.out.println(astEncoder.encodeToString(function.getASTRoot()));
+			// System.out.println(cfgEncoder.encodeToString(function.getCFG()));
+			// System.out.println(cdgEncoder.encodeToString(function.getCDG()));
 		}
 		catch (RuntimeException ex)
 		{
@@ -62,9 +62,7 @@ public class FunctionImporter extends ASTNodeImporter
 	{
 
 		addMainNode(function);
-		System.out.println("mainNodeId = ");
-		System.out.println(getMainNodeId());
-
+		
 		astImporter.setCurrentFunction(function);
 		cfgImporter.setCurrentFunction(function);
 		udgImporter.setCurrentFunction(function);

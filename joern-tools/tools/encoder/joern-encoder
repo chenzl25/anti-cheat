@@ -56,13 +56,25 @@ class ProgramGraph(JoernTool):
                                     help = """Show all edge types""",
                                     default = False)
 
+        self.argParser.add_argument('-func', '--input-function',
+                                    action = 'store_true',
+                                    help = """input-function id""",
+                                    default = False)
+
+        self.argParser.add_argument('-file', '--input-file',
+                                    action = 'store_true',
+                                    help = """input-file id""",
+                                    default = False)
 
     # @Override
     def processLine(self, line):
 
-        function_id = int(line)
-        
-        G = self._createDotGraph(function_id)
+        id = int(line)
+        if self.args.input_function:
+            print self._encoderFunctionId(id)
+        elif self.args.input_file:
+            print self._encoderFileId(id)
+
         # self._outputGraph(G, line)
 
     def _getCFGNodes(self, function_id):
@@ -125,14 +137,36 @@ class ProgramGraph(JoernTool):
 
         return self._getEdges(function_id, 'POST_DOM')
 
-    def _createDotGraph(self, function_id):
+    def _encoderFileId(self, file_id):
+        G = pgv.AGraph(directed = True, strict = False)
+        query = """g.v('%s').out('IS_FILE_OF')""" % (file_id)
+        nodes = self._runGremlinQuery(query)
+        vector = None
+        classCount = 0
+        FunctCount = 0
+        for node in nodes:
+            if node.get_properties()['type'] == 'Function':
+                FunctCount += 1
+                vec = self._encoderFunctionId(node._id)
+                if vector is None:
+                    vector = []
+                    for i in range(len(vec)):
+                        vector.append(vec[i])
+                else:
+                    for i in range(len(vec)):
+                        vector[i] += vec[i]
+            if node.get_properties()['type'] == 'Class':
+                classCount += 1
+        vector += [classCount, FunctCount]
+        return vector
+
+    def _encoderFunctionId(self, function_id):
         G = pgv.AGraph(directed = True, strict = False)
         vector = []
-        vector += self._ast_stat(self._getASTGraph(function_id));
+        # vector += self._ast_stat(self._getASTGraph(function_id));
         self._addCFGNodes(G, self._getCFGNodes(function_id))
-        # print self._attributesAsString(G.get_node(G.nodes()[0]))
-        # vector += self._node_stat(self._getCFGNodes(function_id))
-        # vector += self._edge_stat(self._getCFGEdges(function_id))
+        vector += self._node_stat(self._getCFGNodes(function_id))
+        vector += self._edge_stat(self._getCFGEdges(function_id))
         self._addSymbolNodes(G, self._getSymbolNodes(function_id))
         self._addCFGEdges(G, self._getCFGEdges(function_id))
         vector += self._degree_stat(G)
@@ -146,21 +180,17 @@ class ProgramGraph(JoernTool):
         vector += self._degree_stat(G)
         self._addDomEdges(G, self._getDomEdges(function_id))
         vector += self._degree_stat(G)
-        print vector
-        return G
+        return vector
 
     def _node_stat(self, nodes):
         for node in nodes:
             properties = node.get_properties()
-            print properties['type']
-        return []
+        return [len(nodes)]
 
     def _edge_stat(self, edges):
         for edge in edges:
             properties = edge.get_properties()
-            # print properties['type']
-            print properties
-        return []
+        return [len(edge)]
 
     def _degree_stat(self, G):
         return self._degree_stat_impl(G.in_degree()) + self._degree_stat_impl(G.out_degree())
@@ -342,7 +372,6 @@ class ProgramGraph(JoernTool):
 
         for node in G.nodes():
             stat[ast_type_index_map[G.get_node(node).attr['type']]] += 1
-        print stat
         return stat
 
     def _getASTGraph(self, nodeId):

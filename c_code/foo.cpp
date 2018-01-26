@@ -4,7 +4,15 @@ class A {
 	int f(int b) {
 
 	}
+	int h()
 };
+
+int bar(int a) {
+
+}
+
+int haha = 3;
+
 int fun(int n) {
 	int a = 1;
 	int b = 2;

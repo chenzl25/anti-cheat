@@ -13,7 +13,7 @@ public class ModuleParser
 	
 	public void parseFile(String filename)
 	{
-		System.out.println(filename);
+		// System.out.println(filename);
 
 		try
 		{
