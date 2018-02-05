@@ -53,6 +53,16 @@ public class ASTNode
 		return retval;
 	}
 
+	public boolean setChild(int i, ASTNode node) {
+		try {
+			children.set(i, node);
+		} catch (IndexOutOfBoundsException ex)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	public ASTNode popLastChild()
 	{
 		return children.removeLast();

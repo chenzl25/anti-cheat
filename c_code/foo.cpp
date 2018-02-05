@@ -70,3 +70,9 @@ int fun(int n) {
 	return (long) b;
 }
 
+void dylan() {
+	int dd = 1;
+	while (d < 2) {
+		d++;
+	}
+}

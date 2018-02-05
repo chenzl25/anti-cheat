@@ -20,6 +20,7 @@ import encoder.CFGEncoder;
 import encoder.CDGEncoder;
 
 import printer.ASTPrinter;
+import transformer.ASTTransformer;
 
 // Stays alive while importing a function into
 // the database
@@ -43,6 +44,10 @@ public class FunctionImporter extends ASTNodeImporter
 			addFunctionToDatabase(function);
 			linkFunctionToFileNode(function, curFile);
 
+			// transform
+			ASTTransformer astTransformer = new ASTTransformer();
+			astTransformer.transform(function.getASTRoot());
+			astTransformer.transform(function.getASTRoot());
 			// print
 			ASTPrinter astPrinter = new ASTPrinter();
 			astPrinter.print(function.getASTRoot());

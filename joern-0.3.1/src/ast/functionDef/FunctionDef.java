@@ -34,8 +34,8 @@ public class FunctionDef extends ASTNode
 	public String getEscapedCodeStr()
 	{
 		// check if codeStr has already been generated
-		if (codeStr != null)
-			return codeStr;
+		// if (codeStr != null)
+		// 	return codeStr;
 		codeStr = getFunctionSignature();
 		codeStr += "{\n";
 		for (ASTNode node : content.getStatements()) {
