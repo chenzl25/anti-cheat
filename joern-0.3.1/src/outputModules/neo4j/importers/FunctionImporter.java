@@ -19,6 +19,8 @@ import encoder.ASTEncoder;
 import encoder.CFGEncoder;
 import encoder.CDGEncoder;
 
+import printer.ASTPrinter;
+
 // Stays alive while importing a function into
 // the database
 
@@ -41,6 +43,9 @@ public class FunctionImporter extends ASTNodeImporter
 			addFunctionToDatabase(function);
 			linkFunctionToFileNode(function, curFile);
 
+			// print
+			ASTPrinter astPrinter = new ASTPrinter();
+			astPrinter.print(function.getASTRoot());
 			// encode
 			// ASTEncoder astEncoder = new ASTEncoder();
 			// CFGEncoder cfgEncoder = new CFGEncoder();

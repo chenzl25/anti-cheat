@@ -24,7 +24,11 @@ public class CompoundStatement extends Statement
 
 	public String getEscapedCodeStr()
 	{
-		return "";
+		String s = "";
+		for (ASTNode node : getStatements()) {
+			s += node.getEscapedCodeStr() + '\n';
+		}
+		return s;
 	}
 
 	public void accept(ASTNodeVisitor visitor)

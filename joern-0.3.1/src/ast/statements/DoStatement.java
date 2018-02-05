@@ -8,4 +8,12 @@ public class DoStatement extends BlockStarter
 	{
 		visitor.visit(this);
 	}
+
+	public String getEscapedCodeStr()
+	{
+		String s = "do {\n";
+		s += statement.getEscapedCodeStr();
+		s += "} while (" + condition.getEscapedCodeStr() + ")\n";
+		return s;
+	}
 }

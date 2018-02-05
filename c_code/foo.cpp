@@ -25,6 +25,8 @@ int fun(int n) {
 	a = sizeof(A);
 	if (a > 1) {
 		int b = 5;
+	} else if (a < 2) {
+		b + c;
 	} else {
 		int b = 4;
 		c++;
@@ -35,8 +37,12 @@ int fun(int n) {
 	while(p[3] != 0) {
 		switch(a) {
 			case 1:
+			{
+				a++;
 				break;
+			}
 			case 2:
+				a--;
 				break;
 			default:
 				break;
@@ -50,7 +56,7 @@ int fun(int n) {
 		}
 	}
 	do {
-
+		a++;
 	} while (!a);
 
 	goto to;

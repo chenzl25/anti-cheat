@@ -14,7 +14,7 @@ public class ExpressionHolderStatement extends Statement
 		if (expr == null)
 			return "";
 
-		codeStr = expr.getEscapedCodeStr();
+		codeStr = expr.getEscapedCodeStr() + ';';
 		return codeStr;
 	}
 

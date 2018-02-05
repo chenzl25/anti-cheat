@@ -8,4 +8,15 @@ public class WhileStatement extends BlockStarter
 	{
 		visitor.visit(this);
 	}
+
+	public String getEscapedCodeStr()
+	{
+		String s = "while (";
+		s += condition.getEscapedCodeStr();
+		s += ") {\n";
+		s += statement.getEscapedCodeStr();
+		s += "}";
+		return s;
+	}
+
 }

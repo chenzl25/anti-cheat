@@ -42,4 +42,18 @@ public class IfStatement extends BlockStarter
 	{
 		visitor.visit(this);
 	}
+
+	public String getEscapedCodeStr()
+	{
+		String s = "if (";
+		s += condition.getEscapedCodeStr();
+		s += ") {\n";
+		s += statement.getEscapedCodeStr();
+		s += "}";
+		if (elseNode != null) {
+			s += elseNode.getEscapedCodeStr();
+		}
+		return s;
+	}
+
 }

@@ -11,7 +11,7 @@ public class FunctionDef extends ASTNode
 
 	public Identifier name = new DummyNameNode();
 	private ParameterList parameterList = new ParameterList();
-	// private ReturnType returnType = new DummyReturnType();
+	private ReturnType returnType = new DummyReturnType();
 
 	CompoundStatement content = new CompoundStatement();
 
@@ -37,12 +37,20 @@ public class FunctionDef extends ASTNode
 		if (codeStr != null)
 			return codeStr;
 		codeStr = getFunctionSignature();
+		codeStr += "{\n";
+		for (ASTNode node : content.getStatements()) {
+			if (!(node instanceof ParameterList) && !(node instanceof ReturnType)) {
+				codeStr += node.getEscapedCodeStr() + '\n';
+			}
+		}
+		codeStr += "\n}";
 		return codeStr;
 	}
 
 	public String getFunctionSignature()
 	{
-		String retval = name.getEscapedCodeStr();
+		String retval = returnType.getEscapedCodeStr();
+		retval += " " + name.getEscapedCodeStr();
 		if (getParameterList() != null)
 			retval += " (" + getParameterList().getEscapedCodeStr() + ")";
 		else
@@ -74,7 +82,7 @@ public class FunctionDef extends ASTNode
 
 	public void setReturnType(ReturnType returnType)
 	{
-		// this.returnType = returnType;
+		this.returnType = returnType;
 		this.addChild(returnType);
 	}
 

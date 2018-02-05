@@ -47,4 +47,24 @@ public class ForStatement extends BlockStarter
 	{
 		visitor.visit(this);
 	}
+	public String getEscapedCodeStr()
+	{
+		String s = "for (";
+		if (forInitStatement != null) {
+			s += forInitStatement.getEscapedCodeStr();
+		} else {
+			s += "; ";
+		}
+		if (condition != null) {
+			s += condition.getEscapedCodeStr();
+		}
+		s += "; ";
+		if (expression != null) {
+			s += expression.getEscapedCodeStr();
+		}
+		s += ") {\n";
+		s += statement.getEscapedCodeStr();
+		s += "}";
+		return s;
+	}
 }

@@ -8,4 +8,14 @@ public class SwitchStatement extends BlockStarter
 	{
 		visitor.visit(this);
 	}
+
+	public String getEscapedCodeStr()
+	{
+		String s = "switch (";
+		s += condition.getEscapedCodeStr();
+		s += ") {";
+			s += statement.getEscapedCodeStr();
+		s += "}";
+		return s;
+	}
 }

@@ -48,22 +48,12 @@ dot -Tsvg ddgAndCfg.dot -o ddgAndCfg.svg; eog ddgAndCfg.svg
 可以通过对程序中AST，CFG，等相关代码修改进行编码输入到神经网络中。
 
 
-rjzj5r5j22fmivwn
+ [-cfg] [-dfg] [-ddg] [-cdg] [-dom] [-all]
 
 echo 'getFunctionsByName("fun").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -all > all.dot;
 dot -Tsvg all.dot -o all.svg; eog all.svg
 
+先记录下每一份文件对应的ID再使用joern-encoder去查
 
-echo 'getFunctionsByName("fun").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -dom > dom.dot;
-dot -Tsvg dom.dot -o dom.svg; eog dom.svg
+sudo python2 setup.py install;echo 'getFilesByName("c_code/CImg.h").id' | joern-lookup -g | tail -n 1 | joern-encoder -all -file
 
- [-cfg] [-dfg] [-ddg] [-cdg] [-dom] [-all]
-
- echo 'getFunctionsByName("fun").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -dfg > dfg.dot;
-dot -Tsvg dfg.dot -o dfg.svg; eog dfg.svg
-
- echo 'getFunctionsByName("fun").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -ddg > ddg.dot;
-dot -Tsvg ddg.dot -o ddg.svg; eog ddg.svg
-
- echo 'getFunctionsByName("fun").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -cdg > cdg.dot;
-dot -Tsvg cdg.dot -o cdg.svg; eog cdg.svg
