@@ -75,4 +75,8 @@ void dylan() {
 	while (d < 2) {
 		d++;
 	}
+
+	do {
+		d--;
+	} while(d < 3);
 }

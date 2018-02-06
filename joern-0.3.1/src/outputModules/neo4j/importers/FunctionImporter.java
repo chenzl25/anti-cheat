@@ -61,7 +61,7 @@ public class FunctionImporter extends ASTNodeImporter
 		}
 		catch (RuntimeException ex)
 		{
-			// ex.printStackTrace();
+			ex.printStackTrace();
 			System.err.println("Error adding function to database: "
 					+ ((FunctionDef) node).name.getEscapedCodeStr());
 			return;

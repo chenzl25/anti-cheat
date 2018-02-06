@@ -33,15 +33,19 @@ import ast.walking.ASTNodeVisitor;
 import java.util.Map;
 import java.util.HashMap;
 
+import java.util.Random;
+
 public class ASTTransformer extends ASTNodeVisitor {
 
 	private Stack<ASTNode> parentStack;
 	private Stack<Integer> indexStack;
+	private int maxDepth = 10;
+	private int curDepth = 0;
 
 	public void transform(ASTNode node) {
-		System.out.println("transform!!!");
 		parentStack = new Stack<ASTNode>();
 		indexStack = new Stack<Integer>();
+		curDepth = 0;
 		node.accept(this);
 	}
 
@@ -187,7 +191,39 @@ public class ASTTransformer extends ASTNodeVisitor {
 	@Override
 	public void visit(DoStatement expression)
 	{
-		defaultHandler(expression);
+		ASTNode parent = parentStack.peek();
+		Integer index = indexStack.peek();
+		Random rand = new Random();
+		int  n = rand.nextInt(2);
+		if (n == 0) {
+			// IfStatement ifStatement = new IfStatement();
+			// Condition condition = new Condition();
+			// condition.setCodeStr("true");
+			// ifStatement.setCondition(condition);
+			// CompoundStatement compoundStatement = new CompoundStatement();
+			// WhileStatement whileStatement = new WhileStatement();
+			// whileStatement.setCondition(expression.getCondition());
+			// whileStatement.setStatement(expression.getStatement());
+			// compoundStatement.addChild(expression.getStatement());
+			// compoundStatement.addChild(whileStatement);
+			// ifStatement.addChild(compoundStatement);
+			// parent.setChild(index, ifStatement);
+			// defaultHandler(ifStatement);
+		} else if (n == 1) {
+			DoStatement doStatement = new DoStatement();
+			Condition condition = new Condition();
+			condition.setCodeStr("false");
+			doStatement.setCondition(condition);
+			doStatement.setStatement(expression.getStatement());
+			WhileStatement whileStatement = new WhileStatement();
+			whileStatement.setCondition(expression.getCondition());
+			whileStatement.setStatement(expression.getStatement());
+			CompoundStatement compoundStatement = new CompoundStatement();
+			compoundStatement.addChild(doStatement);
+			compoundStatement.addChild(whileStatement);
+			parent.setChild(index, compoundStatement);
+			defaultHandler(compoundStatement);
+		}
 	}
 
 	@Override
@@ -204,6 +240,10 @@ public class ASTTransformer extends ASTNodeVisitor {
 
 	public void visitChildren(ASTNode item)
 	{
+		curDepth++;
+		if (curDepth > maxDepth) {
+			return;
+		}
 		parentStack.push(item);
 		int nChildren = item.getChildCount();
 
@@ -215,6 +255,7 @@ public class ASTTransformer extends ASTNodeVisitor {
 			indexStack.pop();
 		}
 		parentStack.pop();
+		curDepth--;
 	}
 
 }
