@@ -173,11 +173,53 @@ public class ASTTransformer extends ASTNodeVisitor {
 	public void visit(ForStatement expression)
 	{
 		defaultHandler(expression);
+		// all of these transformation don't consider break and continue expressions;
+		// semantic results are provided by code test case
+		
+		// WHILE 
+		/*
+			for (init;cond;expr) {
+				statements;
+			}
+			----------------------
+			init;
+			while (cond) {
+				statements;
+				expr;
+			}
+		*/
+		ASTNode parent = parentStack.peek();
+		Integer index = indexStack.peek();
+		CompoundStatement compoundStatement = new CompoundStatement();
+		WhileStatement whileStatement = new WhileStatement();
+		whileStatement.setCondition(expression.getCondition());
+		CompoundStatement inCompoundStatement = new CompoundStatement();
+		inCompoundStatement.addChild(expression.getStatement());
+		ExpressionStatement expressionStatement = new ExpressionStatement();
+		expressionStatement.setCodeStr(expression.getExpression().getEscapedCodeStr()+";");
+		inCompoundStatement.addChild(expressionStatement);
+		whileStatement.setStatement(inCompoundStatement);
+		compoundStatement.addChild(expression.getForInitStatement());
+		compoundStatement.addChild(whileStatement);
+		parent.setChild(index, compoundStatement);
+
+
+		// GOTO
+		/*
+			init;
+			loop:
+				if (cond) {
+					statements;
+					expr;
+					goto: loop
+				}
+		*/
 	}
 
 	@Override
 	public void visit(WhileStatement expression)
 	{
+		defaultHandler(expression);
 		// TODO: transform randomly
 		ASTNode parent = parentStack.peek();
 		Integer index = indexStack.peek();
@@ -185,30 +227,29 @@ public class ASTTransformer extends ASTNodeVisitor {
 		forStatement.setStatement(expression.getStatement()); 
 		forStatement.setCondition(expression.getCondition());
 		parent.setChild(index, forStatement);
-		defaultHandler(forStatement);
 	}
 
 	@Override
 	public void visit(DoStatement expression)
 	{
+		defaultHandler(expression);
 		ASTNode parent = parentStack.peek();
 		Integer index = indexStack.peek();
 		Random rand = new Random();
 		int  n = rand.nextInt(2);
 		if (n == 0) {
-			// IfStatement ifStatement = new IfStatement();
-			// Condition condition = new Condition();
-			// condition.setCodeStr("true");
-			// ifStatement.setCondition(condition);
-			// CompoundStatement compoundStatement = new CompoundStatement();
-			// WhileStatement whileStatement = new WhileStatement();
-			// whileStatement.setCondition(expression.getCondition());
-			// whileStatement.setStatement(expression.getStatement());
-			// compoundStatement.addChild(expression.getStatement());
-			// compoundStatement.addChild(whileStatement);
-			// ifStatement.addChild(compoundStatement);
-			// parent.setChild(index, ifStatement);
-			// defaultHandler(ifStatement);
+			IfStatement ifStatement = new IfStatement();
+			Condition condition = new Condition();
+			condition.setCodeStr("true");
+			ifStatement.setCondition(condition);
+			CompoundStatement compoundStatement = new CompoundStatement();
+			WhileStatement whileStatement = new WhileStatement();
+			whileStatement.setCondition(expression.getCondition());
+			whileStatement.setStatement(expression.getStatement());
+			compoundStatement.addChild(expression.getStatement());
+			compoundStatement.addChild(whileStatement);
+			ifStatement.addChild(compoundStatement);
+			parent.setChild(index, ifStatement);
 		} else if (n == 1) {
 			DoStatement doStatement = new DoStatement();
 			Condition condition = new Condition();
@@ -222,7 +263,6 @@ public class ASTTransformer extends ASTNodeVisitor {
 			compoundStatement.addChild(doStatement);
 			compoundStatement.addChild(whileStatement);
 			parent.setChild(index, compoundStatement);
-			defaultHandler(compoundStatement);
 		}
 	}
 
@@ -238,6 +278,7 @@ public class ASTTransformer extends ASTNodeVisitor {
 		defaultHandler(expression);
 	}
 
+	@Override
 	public void visitChildren(ASTNode item)
 	{
 		curDepth++;

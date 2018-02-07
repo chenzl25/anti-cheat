@@ -47,7 +47,6 @@ public class FunctionImporter extends ASTNodeImporter
 			// transform
 			ASTTransformer astTransformer = new ASTTransformer();
 			astTransformer.transform(function.getASTRoot());
-			astTransformer.transform(function.getASTRoot());
 			// print
 			ASTPrinter astPrinter = new ASTPrinter();
 			astPrinter.print(function.getASTRoot());
