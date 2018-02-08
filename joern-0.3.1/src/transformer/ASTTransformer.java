@@ -172,48 +172,76 @@ public class ASTTransformer extends ASTNodeVisitor {
 	@Override
 	public void visit(ForStatement expression)
 	{
-		defaultHandler(expression);
 		// all of these transformation don't consider break and continue expressions;
 		// semantic results are provided by code test case
 		
-		// WHILE 
-		/*
-			for (init;cond;expr) {
-				statements;
-			}
-			----------------------
-			init;
-			while (cond) {
-				statements;
-				expr;
-			}
-		*/
+		defaultHandler(expression);
+		Random rand = new Random();
+		int  n = rand.nextInt(2);
 		ASTNode parent = parentStack.peek();
 		Integer index = indexStack.peek();
-		CompoundStatement compoundStatement = new CompoundStatement();
-		WhileStatement whileStatement = new WhileStatement();
-		whileStatement.setCondition(expression.getCondition());
-		CompoundStatement inCompoundStatement = new CompoundStatement();
-		inCompoundStatement.addChild(expression.getStatement());
-		ExpressionStatement expressionStatement = new ExpressionStatement();
-		expressionStatement.setCodeStr(expression.getExpression().getEscapedCodeStr()+";");
-		inCompoundStatement.addChild(expressionStatement);
-		whileStatement.setStatement(inCompoundStatement);
-		compoundStatement.addChild(expression.getForInitStatement());
-		compoundStatement.addChild(whileStatement);
-		parent.setChild(index, compoundStatement);
+		switch (n) {
+			case 0 : {
+				// WHILE 
+				/*
+					for (init;cond;expr) {
+						statements;
+					}
+					----------------------
+					init;
+					while (cond) {
+						statements;
+						expr;
+					}
+				*/
+				CompoundStatement compoundStatement = new CompoundStatement();
+				WhileStatement whileStatement = new WhileStatement();
+				whileStatement.setCondition(expression.getCondition());
+				CompoundStatement inCompoundStatement = new CompoundStatement();
+				inCompoundStatement.addChild(expression.getStatement());
+				ExpressionStatement expressionStatement = new ExpressionStatement();
+				expressionStatement.setCodeStr(expression.getExpression().getEscapedCodeStr()+";");
+				inCompoundStatement.addChild(expressionStatement);
+				whileStatement.setStatement(inCompoundStatement);
+				compoundStatement.addChild(expression.getForInitStatement());
+				compoundStatement.addChild(whileStatement);
+				parent.setChild(index, compoundStatement);
+				break;
+			}
+			case 1 : {
+				// GOTO
+				/*
+					init;
+					loop:
+						if (cond) {
+							statements;
+							expr;
+							goto: loop
+						}
+				*/
+				CompoundStatement compoundStatement = new CompoundStatement();
+				compoundStatement.addChild(expression.getForInitStatement());
+				Label label = new Label();
+				label.setCodeStr("loop:");
+				compoundStatement.addChild(label);
+				IfStatement ifStatement = new IfStatement();
+				ifStatement.setCondition(expression.getCondition());
+				CompoundStatement inCompoundStatement = new CompoundStatement();
+				inCompoundStatement.addChild(expression.getStatement());
+				ExpressionStatement expressionStatement = new ExpressionStatement();
+				expressionStatement.setCodeStr(expression.getExpression().getEscapedCodeStr()+";");
+				inCompoundStatement.addChild(expressionStatement);
+				GotoStatement gotoStatement = new GotoStatement();
+				gotoStatement.addChild(label);
+				inCompoundStatement.addChild(gotoStatement);
+				ifStatement.setStatement(inCompoundStatement);
+				compoundStatement.addChild(ifStatement);
+				parent.setChild(index, compoundStatement);
+				break;
+			}
+		}
 
 
-		// GOTO
-		/*
-			init;
-			loop:
-				if (cond) {
-					statements;
-					expr;
-					goto: loop
-				}
-		*/
 	}
 
 	@Override

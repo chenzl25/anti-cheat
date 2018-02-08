@@ -13,4 +13,11 @@ public class GotoStatement extends JumpStatement
 	{
 		visitor.visit(this);
 	}
+
+	public String getEscapedCodeStr()
+	{
+		String s = "goto ";
+		s += getTarget().substring(0, getTarget().length()-1) + ";\n";
+		return s;
+	}
 }
