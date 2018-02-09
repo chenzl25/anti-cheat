@@ -7,8 +7,20 @@ void dylan() {
 	// do {
 	// 	d--;
 	// } while(d < 3);
-	for (int i = 0; i < 10; i++) {
-		fun(3);
+	// for (int i = 0; i < 10; i++) {
+	// 	fun(3);
+	// }
+
+	switch(dd) {
+		case 1: {
+			d += 2;
+			break;
+		}
+		case 2 :
+			d--;
+			d -= 3;
+		default:
+			d = 4;
 	}
 }
 

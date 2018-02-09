@@ -13,7 +13,7 @@ public class SwitchStatement extends BlockStarter
 	{
 		String s = "switch (";
 		s += condition.getEscapedCodeStr();
-		s += ") {";
+		s += ") {\n";
 			s += statement.getEscapedCodeStr();
 		s += "}";
 		return s;
