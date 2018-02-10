@@ -6,7 +6,9 @@ public class ElseStatement extends BlockStarter
 	{
 		String s = "";
 		s += " else {\n";
-		s += statement.getEscapedCodeStr();
+		if (statement != null) {
+			s += statement.getEscapedCodeStr();
+		}
 		s += "}";
 		return s;
 	}

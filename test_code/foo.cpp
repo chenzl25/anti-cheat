@@ -1,5 +1,6 @@
 void dylan() {
 	int dd = 1;
+	int d = 2;
 	// while (d < 2) {
 	// 	d++;
 	// }
@@ -14,8 +15,9 @@ void dylan() {
 	switch(dd) {
 		case 1: {
 			d += 2;
-			break;
 		}
+		break;
+		d += 3;
 		case 2 :
 			d--;
 			d -= 3;

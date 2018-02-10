@@ -28,6 +28,7 @@ import ast.statements.Label;
 import ast.statements.ReturnStatement;
 import ast.statements.SwitchStatement;
 import ast.statements.WhileStatement;
+import ast.statements.ElseStatement;
 import databaseNodes.FunctionDatabaseNode;
 import ast.walking.ASTNodeVisitor;
 import java.util.Map;
@@ -302,6 +303,7 @@ public class ASTTransformer extends ASTNodeVisitor {
 	}
 
 	@Override
+
 	public void visit(SwitchStatement expression)
 	{
 		/*
@@ -338,56 +340,114 @@ public class ASTTransformer extends ASTNodeVisitor {
 		defaultHandler(expression);
 		ASTNode parent = parentStack.peek();
 		Integer index = indexStack.peek();
-		CompoundStatement compoundStatement = new CompoundStatement();
-		ArrayList<String> condition_string_arr = new ArrayList<>();
-		for (int i = 0; i < expression.getStatement().getChildCount(); i++) {
-			if (expression.getStatement().getChild(i) instanceof Label) {
-				Label label = (Label) expression.getStatement().getChild(i);
-				WhileStatement whileStatement = new WhileStatement();
-				String case_string = label.getEscapedCodeStr();
-				int com_index = case_string.length();
-				for (int j = 0; j < case_string.length(); j++) {
-					if (case_string.charAt(j) == ':') {
-						com_index = j;
-						break;
-					}
-				}
-				if (label.getEscapedCodeStr().charAt(0) == 'c') {
-					int begin_index = 4;
-					String expr = label.getEscapedCodeStr().substring(4, com_index);
-					Condition condition = new Condition();
-					String condition_string = expression.getCondition().getEscapedCodeStr() + " == " + "(" + expr + ")";
-					condition.setCodeStr(condition_string);
-					condition_string_arr.add(condition_string);
-					whileStatement.setCondition(condition);
-				} else {
-					String default_string = "";
-					boolean first = true;
-					for (String s : condition_string_arr) {
-						if (!first) {
-							default_string += " && ";
+		Random rand = new Random();
+		int  n = rand.nextInt(2);
+		if (n == 0) {
+			CompoundStatement compoundStatement = new CompoundStatement();
+			ArrayList<String> condition_string_arr = new ArrayList<>();
+			for (int i = 0; i < expression.getStatement().getChildCount(); i++) {
+				if (expression.getStatement().getChild(i) instanceof Label) {
+					Label label = (Label) expression.getStatement().getChild(i);
+					WhileStatement whileStatement = new WhileStatement();
+					String case_string = label.getEscapedCodeStr();
+					int com_index = case_string.length();
+					for (int j = 0; j < case_string.length(); j++) {
+						if (case_string.charAt(j) == ':') {
+							com_index = j;
+							break;
 						}
-						default_string += "!( " + s + ")";
-						first = false;
 					}
-					Condition condition = new Condition();
-					condition.setCodeStr(default_string);
-					whileStatement.setCondition(condition);
-				}
-				CompoundStatement inCompoundStatement = new CompoundStatement();
-				for (int j = i + 1; j < expression.getStatement().getChildCount(); j++) {
-					if (!(expression.getStatement().getChild(j) instanceof Label)) {
-						inCompoundStatement.addChild(expression.getStatement().getChild(j));
+					if (label.getEscapedCodeStr().charAt(0) == 'c') {
+						int begin_index = 4;
+						String expr = label.getEscapedCodeStr().substring(4, com_index);
+						Condition condition = new Condition();
+						String condition_string = expression.getCondition().getEscapedCodeStr() + " == " + "(" + expr + ")";
+						condition.setCodeStr(condition_string);
+						condition_string_arr.add(condition_string);
+						whileStatement.setCondition(condition);
 					} else {
-						i = j-1;
-						break;
+						String default_string = "true";
+						for (String s : condition_string_arr) {
+							default_string += " && ";
+							default_string += "!( " + s + ")";
+						}
+						Condition condition = new Condition();
+						condition.setCodeStr(default_string);
+						whileStatement.setCondition(condition);
 					}
+					CompoundStatement inCompoundStatement = new CompoundStatement();
+					for (int j = i + 1; j < expression.getStatement().getChildCount(); j++) {
+						if (!(expression.getStatement().getChild(j) instanceof Label)) {
+							inCompoundStatement.addChild(expression.getStatement().getChild(j));
+						} else {
+							i = j-1;
+							break;
+						}
+					}
+					whileStatement.setStatement(inCompoundStatement);
+					compoundStatement.addChild(whileStatement);
 				}
-				whileStatement.setStatement(inCompoundStatement);
-				compoundStatement.addChild(whileStatement);
 			}
+			parent.setChild(index, compoundStatement);
+		} else if (n == 1) {
+			IfStatement rootIfStatement = null;
+			IfStatement ifStatement = null;
+			ElseStatement elseStatement = null;
+			for (int i = 0; i < expression.getStatement().getChildCount(); i++) {
+				if (expression.getStatement().getChild(i) instanceof Label) {
+					Label label = (Label) expression.getStatement().getChild(i);
+					String case_string = label.getEscapedCodeStr();
+					int com_index = case_string.length();
+					for (int j = 0; j < case_string.length(); j++) {
+						if (case_string.charAt(j) == ':') {
+							com_index = j;
+							break;
+						}
+					}
+					if (label.getEscapedCodeStr().charAt(0) == 'c') {
+						int begin_index = 4;
+						String expr = label.getEscapedCodeStr().substring(4, com_index);
+						Condition condition = new Condition();
+						String condition_string = expression.getCondition().getEscapedCodeStr() + " == " + "(" + expr + ")";
+						condition.setCodeStr(condition_string);
+						ifStatement = new IfStatement();
+						ifStatement.addChild(condition);
+					} else {
+						// default:
+						String default_string = "true";
+						Condition condition = new Condition();	
+						condition.setCodeStr(default_string);
+						ifStatement = new IfStatement();
+						ifStatement.addChild(condition);
+					}
+					CompoundStatement inCompoundStatement = new CompoundStatement();
+					boolean reach_break = false;
+					for (int j = i + 1; j < expression.getStatement().getChildCount(); j++) {
+						if (!(expression.getStatement().getChild(j) instanceof Label)) {
+							if (expression.getStatement().getChild(j) instanceof BreakStatement) {
+								reach_break = true;
+							}
+							if (!reach_break) {
+								inCompoundStatement.addChild(expression.getStatement().getChild(j));
+							}
+						} else {
+							i = j-1;
+							break;
+						}
+					}
+					ifStatement.addChild(inCompoundStatement);
+					if (rootIfStatement == null) {
+						rootIfStatement = ifStatement;
+					} else {
+						elseStatement.setStatement(ifStatement);
+					}
+					elseStatement = new ElseStatement();
+					// ifStatement.addChild(elseStatement);
+					ifStatement.setElseNode(elseStatement);
+				}
+			}
+			parent.setChild(index, rootIfStatement);
 		}
-		parent.setChild(index, compoundStatement);
 	}
 
 	@Override
