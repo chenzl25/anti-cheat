@@ -11,18 +11,21 @@ void dylan() {
 	// for (int i = 0; i < 10; i++) {
 	// 	fun(3);
 	// }
-
-	switch(dd) {
-		case 1: {
-			d += 2;
-		}
-		break;
-		d += 3;
-		case 2 :
-			d--;
-			d -= 3;
-		default:
-			d = 4;
+	if (d == 1) {
+		d--;
+		d++;
 	}
+	// switch(dd) {
+	// 	case 1: {
+	// 		d += 2;
+	// 	}
+	// 	break;
+	// 	d += 3;
+	// 	case 2 :
+	// 		d--;
+	// 		d -= 3;
+	// 	default:
+	// 		d = 4;
+	// }
 }
 

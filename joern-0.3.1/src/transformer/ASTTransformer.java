@@ -169,6 +169,13 @@ public class ASTTransformer extends ASTNodeVisitor {
 	public void visit(IfStatement expression)
 	{
 		defaultHandler(expression);
+		ASTNode parent = parentStack.peek();
+		Integer index = indexStack.peek();
+		WhileStatement whileStatement = new WhileStatement();
+		whileStatement.setCondition(expression.getCondition());
+		whileStatement.setStatement(expression.getStatement());
+		whileStatement.getStatement().addChild(new BreakStatement());
+		parent.setChild(index, whileStatement);
 	}
 
 	@Override

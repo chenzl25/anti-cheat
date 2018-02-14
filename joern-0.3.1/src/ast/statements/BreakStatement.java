@@ -8,4 +8,9 @@ public class BreakStatement extends JumpStatement
 	{
 		visitor.visit(this);
 	}
+
+	public String getEscapedCodeStr()
+	{
+		return "break;";
+	}
 }
