@@ -1,4 +1,4 @@
-void dylan() {
+void dylan(int a, int b, double c) {
 	int dd = 1;
 	int d = 2;
 	// while (d < 2) {

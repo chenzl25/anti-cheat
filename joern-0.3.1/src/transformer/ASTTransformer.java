@@ -34,6 +34,9 @@ import ast.walking.ASTNodeVisitor;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+
 
 import java.util.Random;
 
@@ -67,6 +70,24 @@ public class ASTTransformer extends ASTNodeVisitor {
 	public void visit(FunctionDef item)
 	{
 		defaultHandler(item);
+		ParameterList parameterList = item.getParameterList();
+		CompoundStatement compoundStatement = new CompoundStatement();
+		LinkedList<Parameter> parameters = parameterList.getParameters();
+		Iterator<Parameter> i = parameters.iterator();
+		for (; i.hasNext();)
+		{
+			Random rand = new Random();
+			int  n = rand.nextInt(3);
+			Parameter param = i.next();
+			if (n == 0) { // 1/3 
+				i.remove();
+				IdentifierDeclStatement identifierDeclStatement = new IdentifierDeclStatement();
+				identifierDeclStatement.setCodeStr(param.getEscapedCodeStr() + ";");
+				compoundStatement.addChild(identifierDeclStatement);
+			}
+		}
+		compoundStatement.addChild(item.getContent());
+		item.setContent(compoundStatement);
 	}
 
 	@Override

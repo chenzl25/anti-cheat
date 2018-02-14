@@ -69,9 +69,6 @@ public class ParameterList extends ASTNode
 	@Override
 	public String getEscapedCodeStr()
 	{
-		if (codeStr != null)
-			return codeStr;
-
 		if (parameters.size() == 0)
 		{
 			codeStr = "";
