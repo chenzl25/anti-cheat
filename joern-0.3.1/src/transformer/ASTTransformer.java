@@ -46,6 +46,7 @@ public class ASTTransformer extends ASTNodeVisitor {
 	private Stack<Integer> indexStack;
 	private int maxDepth = 10;
 	private int curDepth = 0;
+	private int loopNum = 0;
 
 	public void transform(ASTNode node) {
 		parentStack = new Stack<ASTNode>();
@@ -219,14 +220,31 @@ public class ASTTransformer extends ASTNodeVisitor {
 	@Override
 	public void visit(IfStatement expression)
 	{
+		/*
+			if (cond) {
+				stmt
+			}
+			------------------------
+			while(cond) {
+				stmt;
+				break;
+			}
+
+		*/
 		defaultHandler(expression);
-		ASTNode parent = parentStack.peek();
-		Integer index = indexStack.peek();
-		WhileStatement whileStatement = new WhileStatement();
-		whileStatement.setCondition(expression.getCondition());
-		whileStatement.setStatement(expression.getStatement());
-		whileStatement.getStatement().addChild(new BreakStatement());
-		parent.setChild(index, whileStatement);
+		if (expression.getElseNode() == null) {
+			Random rand = new Random();
+			int  n = rand.nextInt(2);
+			if (n == 0) {
+				ASTNode parent = parentStack.peek();
+				Integer index = indexStack.peek();
+				WhileStatement whileStatement = new WhileStatement();
+				whileStatement.setCondition(expression.getCondition());
+				whileStatement.setStatement(expression.getStatement());
+				whileStatement.getStatement().addChild(new BreakStatement());
+				parent.setChild(index, whileStatement);
+			}
+		}
 	}
 
 	@Override
@@ -237,7 +255,7 @@ public class ASTTransformer extends ASTNodeVisitor {
 		
 		defaultHandler(expression);
 		Random rand = new Random();
-		int  n = rand.nextInt(2);
+		int  n = rand.nextInt(3);
 		ASTNode parent = parentStack.peek();
 		Integer index = indexStack.peek();
 		switch (n) {
@@ -286,7 +304,7 @@ public class ASTTransformer extends ASTNodeVisitor {
 						if (cond) {
 							statements;
 							expr;
-							goto: loop
+							goto loop
 						}
 				*/
 				CompoundStatement compoundStatement = new CompoundStatement();
@@ -294,7 +312,7 @@ public class ASTTransformer extends ASTNodeVisitor {
 					compoundStatement.addChild(expression.getForInitStatement());
 				}
 				Label label = new Label();
-				label.setCodeStr("loop:");
+				label.setCodeStr(nextLoopLabel());
 				compoundStatement.addChild(label);
 				IfStatement ifStatement = new IfStatement();
 				if (expression.getCondition() != null) {
@@ -327,14 +345,57 @@ public class ASTTransformer extends ASTNodeVisitor {
 	@Override
 	public void visit(WhileStatement expression)
 	{
+		/*
+			while (cond) {
+				stmt
+			}
+			--------------------
+			for (;cond;) {
+				stmt
+			}
+			-------------------
+			loop:
+				if (cond) {
+					stmt
+					goto loop
+				}
+		*/
 		defaultHandler(expression);
-		// TODO: transform randomly
 		ASTNode parent = parentStack.peek();
 		Integer index = indexStack.peek();
-		ForStatement forStatement = new ForStatement();
-		forStatement.setStatement(expression.getStatement()); 
-		forStatement.setCondition(expression.getCondition());
-		parent.setChild(index, forStatement);
+		// TODO: transform randomly
+		Random rand = new Random();
+		int  n = rand.nextInt(3);
+		switch (n) {
+			case 0: {
+				ForStatement forStatement = new ForStatement();
+				forStatement.setStatement(expression.getStatement()); 
+				forStatement.setCondition(expression.getCondition());
+				parent.setChild(index, forStatement);
+				break;
+			}
+			case 1: {
+				CompoundStatement compoundStatement = new CompoundStatement();
+				Label label = new Label();
+				label.setCodeStr(nextLoopLabel());
+				compoundStatement.addChild(label);
+				IfStatement ifStatement = new IfStatement();
+				ifStatement.setCondition(expression.getCondition());
+				CompoundStatement inCompoundStatement = new CompoundStatement();
+				inCompoundStatement.addChild(expression.getStatement());
+				GotoStatement gotoStatement = new GotoStatement();
+				gotoStatement.addChild(label);
+				inCompoundStatement.addChild(gotoStatement);
+				ifStatement.setStatement(inCompoundStatement);
+				compoundStatement.addChild(ifStatement);
+				parent.setChild(index, compoundStatement);
+				break;
+			}
+		}
+	}
+
+	String nextLoopLabel() {
+		return "loop" + (loopNum++) + ':';
 	}
 
 	@Override
@@ -344,7 +405,7 @@ public class ASTTransformer extends ASTNodeVisitor {
 		ASTNode parent = parentStack.peek();
 		Integer index = indexStack.peek();
 		Random rand = new Random();
-		int  n = rand.nextInt(2);
+		int  n = rand.nextInt(3);
 		if (n == 0) {
 			IfStatement ifStatement = new IfStatement();
 			Condition condition = new Condition();
@@ -419,7 +480,7 @@ public class ASTTransformer extends ASTNodeVisitor {
 		ASTNode parent = parentStack.peek();
 		Integer index = indexStack.peek();
 		Random rand = new Random();
-		int  n = rand.nextInt(2);
+		int  n = rand.nextInt(3);
 		if (n == 0) {
 			CompoundStatement compoundStatement = new CompoundStatement();
 			ArrayList<String> condition_string_arr = new ArrayList<>();
