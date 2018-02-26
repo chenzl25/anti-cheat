@@ -77,17 +77,47 @@ public class ASTTransformer extends ASTNodeVisitor {
 		for (; i.hasNext();)
 		{
 			Random rand = new Random();
-			int  n = rand.nextInt(3);
+			int  n = rand.nextInt(8);
 			Parameter param = i.next();
-			if (n == 0) { // 1/3 
+			if (n == 0) { // 1/8
 				i.remove();
 				IdentifierDeclStatement identifierDeclStatement = new IdentifierDeclStatement();
 				identifierDeclStatement.setCodeStr(param.getEscapedCodeStr() + ";");
+				compoundStatement.addChild(identifierDeclStatement);
+			} else if (n == 1) {
+				IdentifierDeclStatement identifierDeclStatement = new IdentifierDeclStatement();
+				identifierDeclStatement.setCodeStr(randomDeclStatementStr());
 				compoundStatement.addChild(identifierDeclStatement);
 			}
 		}
 		compoundStatement.addChild(item.getContent());
 		item.setContent(compoundStatement);
+	}
+
+	String randomDeclStatementStr() {
+		Random rand = new Random();
+		int  n = rand.nextInt(5);
+		ArrayList<String> typeArr = new ArrayList<String>();
+		typeArr.add("double");
+		typeArr.add("int");
+		typeArr.add("char");
+		typeArr.add("bool");
+		typeArr.add("float");
+		String s = "";
+		s += typeArr.get(n);
+		s += " ";
+		String name = "";
+		for (int i = 0; i < 6; i++) {
+			char c = (char)('a' + rand.nextInt(26));
+			name += c;
+		}
+		s += name;
+		if (rand.nextInt(2) == 0) {
+			s += " = ";
+			s += rand.nextInt(256);
+		}
+		s += ";";
+		return s;
 	}
 
 	@Override
@@ -226,14 +256,24 @@ public class ASTTransformer extends ASTNodeVisitor {
 				*/
 				CompoundStatement compoundStatement = new CompoundStatement();
 				WhileStatement whileStatement = new WhileStatement();
-				whileStatement.setCondition(expression.getCondition());
+				if (expression.getCondition() != null) {
+					whileStatement.setCondition(expression.getCondition());
+				} else {
+					Condition condition = new Condition();
+					condition.setCodeStr("true");
+					whileStatement.setCondition(condition);
+				}
 				CompoundStatement inCompoundStatement = new CompoundStatement();
 				inCompoundStatement.addChild(expression.getStatement());
-				ExpressionStatement expressionStatement = new ExpressionStatement();
-				expressionStatement.setCodeStr(expression.getExpression().getEscapedCodeStr()+";");
-				inCompoundStatement.addChild(expressionStatement);
+				if (expression.getExpression() != null) {
+					ExpressionStatement expressionStatement = new ExpressionStatement();
+					expressionStatement.setCodeStr(expression.getExpression().getEscapedCodeStr()+";");
+					inCompoundStatement.addChild(expressionStatement);
+				}
 				whileStatement.setStatement(inCompoundStatement);
-				compoundStatement.addChild(expression.getForInitStatement());
+				if (expression.getForInitStatement() != null) {
+					compoundStatement.addChild(expression.getForInitStatement());
+				}
 				compoundStatement.addChild(whileStatement);
 				parent.setChild(index, compoundStatement);
 				break;
@@ -250,17 +290,27 @@ public class ASTTransformer extends ASTNodeVisitor {
 						}
 				*/
 				CompoundStatement compoundStatement = new CompoundStatement();
-				compoundStatement.addChild(expression.getForInitStatement());
+				if (expression.getForInitStatement() != null) {
+					compoundStatement.addChild(expression.getForInitStatement());
+				}
 				Label label = new Label();
 				label.setCodeStr("loop:");
 				compoundStatement.addChild(label);
 				IfStatement ifStatement = new IfStatement();
-				ifStatement.setCondition(expression.getCondition());
+				if (expression.getCondition() != null) {
+					ifStatement.setCondition(expression.getCondition());
+				} else {
+					Condition condition = new Condition();
+					condition.setCodeStr("true");
+					ifStatement.setCondition(condition);
+				}
 				CompoundStatement inCompoundStatement = new CompoundStatement();
 				inCompoundStatement.addChild(expression.getStatement());
-				ExpressionStatement expressionStatement = new ExpressionStatement();
-				expressionStatement.setCodeStr(expression.getExpression().getEscapedCodeStr()+";");
-				inCompoundStatement.addChild(expressionStatement);
+				if (expression.getExpression() != null) {
+					ExpressionStatement expressionStatement = new ExpressionStatement();
+					expressionStatement.setCodeStr(expression.getExpression().getEscapedCodeStr()+";");
+					inCompoundStatement.addChild(expressionStatement);
+				}
 				GotoStatement gotoStatement = new GotoStatement();
 				gotoStatement.addChild(label);
 				inCompoundStatement.addChild(gotoStatement);

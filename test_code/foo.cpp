@@ -8,13 +8,13 @@ void dylan(int a, int b, double c) {
 	// do {
 	// 	d--;
 	// } while(d < 3);
-	// for (int i = 0; i < 10; i++) {
-	// 	fun(3);
-	// }
-	if (d == 1) {
-		d--;
-		d++;
+	for (int i = 0; i < 10; i++) {
+		fun(3);
 	}
+	// if (d == 1) {
+	// 	d--;
+	// 	d++;
+	// }
 	// switch(dd) {
 	// 	case 1: {
 	// 		d += 2;
