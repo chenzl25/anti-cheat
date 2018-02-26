@@ -11,7 +11,7 @@ for f in *; do
     	mkdir dest_$fbase
     	for i in {0..9}
 		do
-			java -jar /home/dyaln/Desktop/bishe/joern-0.3.1/bin/joern.jar src_$fbase  -outdir /tmp/rubbish > dest_$fbase/$i.cpp
+			java -jar /home/dyaln/Desktop/bishe/joern-0.3.1/bin/joern.jar src_$fbase > dest_$fbase/$i.cpp
 		done
     fi
 done

@@ -41,8 +41,8 @@ public class FunctionImporter extends ASTNodeImporter
 			// this actually constructs all other representations of
 			// the function.
 			function.initialize(node);
-			addFunctionToDatabase(function);
-			linkFunctionToFileNode(function, curFile);
+			// addFunctionToDatabase(function);
+			// linkFunctionToFileNode(function, curFile);
 
 			// transform
 			ASTTransformer astTransformer = new ASTTransformer();

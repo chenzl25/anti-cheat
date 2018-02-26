@@ -26,11 +26,11 @@ public class Neo4JDirectoryTreeImporter extends DirectoryTreeImporter
 
 	protected void insertNode(FileDatabaseNode node)
 	{
-		Map<String, Object> properties = node.createProperties();
-		long nodeId = Neo4JBatchInserter.addNode(properties);
-		node.setId(nodeId);
+		// Map<String, Object> properties = node.createProperties();
+		// long nodeId = Neo4JBatchInserter.addNode(properties);
+		// node.setId(nodeId);
 
-		Neo4JBatchInserter.indexNode(nodeId, properties);
+		// Neo4JBatchInserter.indexNode(nodeId, properties);
 	}
 
 }

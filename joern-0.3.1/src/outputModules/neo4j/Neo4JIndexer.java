@@ -25,17 +25,17 @@ public class Neo4JIndexer extends Indexer
 	@Override
 	protected void initializeDatabase()
 	{
-		Neo4JBatchInserter.setIndexDirectoryName(outputDir);
-		Map<String, String> config = ConfigurationGenerator
-				.generateConfiguration();
-		Neo4JBatchInserter.setBatchInserterConfig(config);
-		Neo4JBatchInserter.openDatabase();
+		// Neo4JBatchInserter.setIndexDirectoryName(outputDir);
+		// Map<String, String> config = ConfigurationGenerator
+		// 		.generateConfiguration();
+		// Neo4JBatchInserter.setBatchInserterConfig(config);
+		// Neo4JBatchInserter.openDatabase();
 	}
 
 	@Override
 	protected void shutdownDatabase()
 	{
-		Neo4JBatchInserter.closeDatabase();
+		// Neo4JBatchInserter.closeDatabase();
 	}
 
 }

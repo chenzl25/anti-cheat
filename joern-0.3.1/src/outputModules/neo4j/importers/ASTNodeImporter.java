@@ -21,7 +21,8 @@ public abstract class ASTNodeImporter
 
 	public long getMainNodeId()
 	{
-		return mainNodeId;
+		return -1;
+		// return mainNodeId;
 	}
 
 	public abstract void addToDatabaseSafe(ASTNode node);

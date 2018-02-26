@@ -22,9 +22,9 @@ public class DeclStmtImporter extends ASTNodeImporter
 	{
 		DeclStmtDatabaseNode dbNode = new DeclStmtDatabaseNode();
 		dbNode.initialize(node);
-		addMainNode(dbNode);
+		// addMainNode(dbNode);
 
-		addDeclarations(node);
+		// addDeclarations(node);
 	}
 
 	private void addDeclarations(ASTNode node)

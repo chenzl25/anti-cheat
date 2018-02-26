@@ -23,8 +23,8 @@ public abstract class DirectoryTreeImporter
 	public void enterDir(Path dir)
 	{
 		FileDatabaseNode node = new FileDatabaseNode();
-		insertDirectoryNode(dir, node);
-		linkWithParentDirectory(node);
+		// insertDirectoryNode(dir, node);
+		// linkWithParentDirectory(node);
 
 		directoryStack.push(node);
 	}
@@ -37,8 +37,8 @@ public abstract class DirectoryTreeImporter
 	public void enterFile(Path pathToFile)
 	{
 		FileDatabaseNode node = new FileDatabaseNode();
-		insertFileNode(pathToFile, node);
-		linkWithParentDirectory(node);
+		// insertFileNode(pathToFile, node);
+		// linkWithParentDirectory(node);
 		state.setCurrentFileNode(node);
 		// System.out.printf("%s %d\n", pathToFile, node.getId());
 	}

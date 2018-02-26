@@ -20,9 +20,9 @@ public class ClassDefImporter extends ASTNodeImporter
 		{
 			ClassDefDatabaseNode classDefNode = new ClassDefDatabaseNode();
 			classDefNode.initialize(node);
-			addClassDefToDatabase(classDefNode);
+			// addClassDefToDatabase(classDefNode);
 
-			linkClassDefToFileNode(classDefNode, curFile);
+			// linkClassDefToFileNode(classDefNode, curFile);
 		}
 		catch (RuntimeException ex)
 		{
@@ -46,9 +46,9 @@ public class ClassDefImporter extends ASTNodeImporter
 		Neo4JBatchInserter.addRelationship(fileId, functionId, rel, null);
 	}
 
-	private void addClassDefToDatabase(ClassDefDatabaseNode classDefNode)
+	// private void addClassDefToDatabase(ClassDefDatabaseNode classDefNode)
 	{
-		addMainNode(classDefNode);
+		// addMainNode(classDefNode);
 
 	}
 

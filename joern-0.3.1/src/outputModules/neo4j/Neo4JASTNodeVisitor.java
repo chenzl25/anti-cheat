@@ -42,10 +42,11 @@ public class Neo4JASTNodeVisitor extends ASTNodeVisitor
 	{
 		importer.setCurrentFile(currentFileNode);
 		importer.addToDatabaseSafe(node);
-		long mainNodeId = importer.getMainNodeId();
-		addLinkToClassDef(mainNodeId);
-		importer = null;
-		return mainNodeId;
+		return -1;
+		// long mainNodeId = importer.getMainNodeId();
+		// addLinkToClassDef(mainNodeId);
+		// importer = null;
+		// return mainNodeId;
 	}
 
 	private void addLinkToClassDef(long dstNodeId)
