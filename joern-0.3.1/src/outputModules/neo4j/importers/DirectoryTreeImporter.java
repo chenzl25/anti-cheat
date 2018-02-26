@@ -40,7 +40,7 @@ public abstract class DirectoryTreeImporter
 		insertFileNode(pathToFile, node);
 		linkWithParentDirectory(node);
 		state.setCurrentFileNode(node);
-		System.out.printf("%s %d\n", pathToFile, node.getId());
+		// System.out.printf("%s %d\n", pathToFile, node.getId());
 	}
 
 	protected void insertDirectoryNode(Path dir, FileDatabaseNode node)
