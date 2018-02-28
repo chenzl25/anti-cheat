@@ -9,7 +9,7 @@ for f in *; do
     	mkdir src_$fbase
     	mv $f src_$fbase
     	mkdir dest_$fbase
-    	for i in {0..9}
+    	for i in {0..5}
 		do
 			java -jar /home/dyaln/Desktop/bishe/joern-0.3.1/bin/joern.jar src_$fbase > dest_$fbase/$i.cpp
 		done
