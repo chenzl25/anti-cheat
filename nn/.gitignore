@@ -1,0 +1,8 @@
+ProgramData/
+klarge/
+params_data/
+params_tmp/
+sort/
+test_code/
+*.txt
+*.csv

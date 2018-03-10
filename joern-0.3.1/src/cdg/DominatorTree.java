@@ -241,7 +241,7 @@ public class DominatorTree<V>
 			}
 			if (orderedVertices.size() < graph.size())
 			{
-				System.out.println("warning: incomplete control flow graph");
+				// System.out.println("warning: incomplete control flow graph");
 			}
 		}
 

@@ -67,15 +67,31 @@ class ProgramGraph(JoernTool):
                                     default = False)
 
     # @Override
+    # def processLine(self, line):
+
+    #     id = int(line)
+    #     if self.args.input_function:
+    #         print self._encoderFunctionId(id)
+    #     elif self.args.input_file:
+    #         print self._encoderFileId(id)
+
     def processLine(self, line):
-
-        id = int(line)
-        if self.args.input_function:
-            print self._encoderFunctionId(id)
-        elif self.args.input_file:
-            print self._encoderFileId(id)
-
-        # self._outputGraph(G, line)
+        input_file = open('result_reorder.txt', 'r')
+        output_file = open('output_reorder.txt', 'a')
+        lines = input_file.readlines();
+        count = 0
+        for line in lines:
+            count += 1
+            if count < 1425:
+                continue
+            file_name, file_id = line.split('\n')[0].split(' ')
+            print count, file_id
+            try:
+                output_file.write(file_name + ' ' + str(file_id) + ' ' + ','.join(str(e) for e in self._encoderFileId(file_id)) + '\n')
+            except Exception as e:
+                print type(e)
+        input_file.close()
+        output_file.close()
 
     def _getCFGNodes(self, function_id):
 
@@ -157,14 +173,18 @@ class ProgramGraph(JoernTool):
                         vector[i] += vec[i]
             if node.get_properties()['type'] == 'Class':
                 classCount += 1
+        if vector == None:
+            vector = []
+            for i in range(140):
+                vector.append(0)
         vector += [classCount, FunctCount]
-        print len(vector)
+        # print len(vector)
         return vector
 
     def _encoderFunctionId(self, function_id):
         G = pgv.AGraph(directed = True, strict = False)
         vector = []
-        # vector += self._ast_stat(self._getASTGraph(function_id));
+        vector += self._ast_stat(self._getASTGraph(function_id));
         self._addCFGNodes(G, self._getCFGNodes(function_id))
         vector += self._node_stat(self._getCFGNodes(function_id))
         vector += self._edge_stat(self._getCFGEdges(function_id))
