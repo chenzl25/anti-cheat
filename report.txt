@@ -67,3 +67,49 @@ dot -Tsvg ddg.dot -o ddg.svg; eog ddg.svg
 
  echo 'getFunctionsByName("fun").id' | joern-lookup -g | tail -n 1 | joern-plot-proggraph -cdg > cdg.dot;
 dot -Tsvg cdg.dot -o cdg.svg; eog cdg.svg
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+1.首先将文件通过joern编码到neo4j数据库里面
+2.使用joern-encode来将其编码成向量输入到文件中
+3.拼接向量加上标签，形成训练集和测试集
+4.训练神经网络
+5.使用神经网路预测
+
+
+步骤1主要文件在joern-0.3.1/中
+步骤2主要文件在joern-tools/中
+步骤3,4,5主要文件在nn/中
+
+步骤1:
+java -jar /home/dyaln/Desktop/bishe/joern-0.3.1/bin/joern.jar /输入代码目录  -outdir neo4j-community-2.1.8/data/myc.db > result.txt
+myc.db为neo4j的数据库,result.txt为文件和neo4j中节点的id对应关系，用于步骤2的查询
+
+步骤2:
+启动数据库server
+./neo4j-community-2.1.8/bin/neo4j console
+使用joern-encode利用result.txt的对应信息编码取得每个文件的特征向量保存至文件夹output.txt
+
+步骤3:
+根据实际情况组合向量对加上相似性的标签0或1
+例如一份代码经过混淆后相应的代码向量可以组合成相似性标签为1的训练集合
+而来源不同的代码则可以组合成相似性标签为0的训练集
+
+步骤4,5:
+nn/iris_data.py修改对应的训练数据文件和测试数据文件
+nn/premade_estimator.py启动训练或者测试
+
+
+
+
+
+
+
+
+
+
+
+
+
