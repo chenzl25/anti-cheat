@@ -24,7 +24,7 @@ import iris_data
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--batch_size', default=100, type=int, help='batch size')
-parser.add_argument('--train_steps', default=40000, type=int,
+parser.add_argument('--train_steps', default=50000, type=int,
                     help='number of training steps')
 
 def main(argv):
@@ -43,14 +43,14 @@ def main(argv):
         hidden_units=[10, 10],
         # The model must choose between 2 classes.
         n_classes=2,
-        model_dir='./params_data'
+        # model_dir='./params_tmp'
         )
 
     # Train the Model.
-    # classifier.train(
-    #     input_fn=lambda:iris_data.train_input_fn(train_x, train_y,
-    #                                              args.batch_size),
-    #     steps=args.train_steps)
+    classifier.train(
+        input_fn=lambda:iris_data.train_input_fn(train_x, train_y,
+                                                 args.batch_size),
+        steps=args.train_steps)
 
     # Evaluate the model.
     eval_result = classifier.evaluate(
@@ -60,22 +60,22 @@ def main(argv):
     print('\nTest set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
 
     # Generate predictions from the model
-    expected = map(lambda x: 'YES' if x == 1 else 'NO', test_y)
-    predict_x = test_x
+    # expected = map(lambda x: 'YES' if x == 1 else 'NO', test_y)
+    # predict_x = test_x
 
-    predictions = classifier.predict(
-        input_fn=lambda:iris_data.eval_input_fn(predict_x,
-                                                labels=None,
-                                                batch_size=args.batch_size))
+    # predictions = classifier.predict(
+    #     input_fn=lambda:iris_data.eval_input_fn(predict_x,
+    #                                             labels=None,
+    #                                             batch_size=args.batch_size))
 
-    for pred_dict, expec in zip(predictions, expected):
-        template = ('\nPrediction is "{}" ({:.1f}%), expected "{}"')
+    # for pred_dict, expec in zip(predictions, expected):
+    #     template = ('\nPrediction is "{}" ({:.1f}%), expected "{}"')
 
-        class_id = pred_dict['class_ids'][0]
-        probability = pred_dict['probabilities'][class_id]
+    #     class_id = pred_dict['class_ids'][0]
+    #     probability = pred_dict['probabilities'][class_id]
 
-        print(template.format(iris_data.ISCHEAT[class_id],
-                              100 * probability, expec))
+    #     print(template.format(iris_data.ISCHEAT[class_id],
+    #                           100 * probability, expec))
 
 
 if __name__ == '__main__':

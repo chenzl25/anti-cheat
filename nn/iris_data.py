@@ -14,8 +14,8 @@ ISCHEAT = ['NO', 'YES']
 def maybe_download():
     # train_path = tf.keras.utils.get_file(TRAIN_URL.split('/')[-1], TRAIN_URL)
     # test_path = tf.keras.utils.get_file(TEST_URL.split('/')[-1], TEST_URL)
-    train_path = 'my.csv'
-    test_path = 'my.csv'
+    train_path = 'train.csv'
+    test_path = 'test.csv'
     return train_path, test_path
 
 def load_data(y_name='ISCHEAT'):

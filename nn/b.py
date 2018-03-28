@@ -1,13 +1,13 @@
 import math
 
 def main():
-	train_total_file = open("me.csv", "r")
+	train_total_file = open("output_sort.txt", "r")
 	train_file = open("my.csv", "w")
 	lines = train_total_file.readlines()
 	for line in lines:
 		vector = line.split('\n')[0].split(',')
 		label = vector.pop()
-		vector = map(lambda x: int(x), vector)
+		vector = map(lambda x: float(x), vector)
 		l = len(vector) / 2
 		v1 = vector[:l]
 		v2 = vector[l:]

@@ -1,30 +1,18 @@
-f = open('output_reorder.txt', 'r')
+import math
 
-lines = f.readlines()
+def main():
+	train_total_file = open("my.csv", "r")
+	lines = train_total_file.readlines()
+	total_abs = 0
+	for line in lines:
+		abs_sum = 0
+		vector = line.split('\n')[0].split(',')
+		label = vector.pop()
+		vector = map(lambda x: float(x), vector)
+		for i in range(len(vector)/2):
+			abs_sum += vector[i] - vector[i+len(vector)/2] if (vector[i] - vector[i+len(vector)/2]) > 0 else  vector[i+len(vector)/2] - vector[i]
+			total_abs += abs_sum
+	print total_abs
 
-m = {}
-
-for line in lines:
-	full_name, _, vector_string = line.split('\n')[0].split(' ')
-	basename = full_name.split('/')[-1].split('-')[0]
-	vector = vector_string.split(',')
-	if basename in m:
-		m[basename].append(vector)
-	else:
-		m[basename] = [vector]
-
-o = open('me.csv', 'w')
-
-for key in m.keys():
-	vectors = m[key]
-	for i in range(len(vectors)):
-		for j in range(i+1, len(vectors)):
-			o.write(','.join(vectors[i] + vectors[j] + ['1'])+ '\n')
-
-count = 0
-
-# for key1 in m.keys():
-# 	for key2 in m.keys():
-# 		count += 1
-# 		if key1 != key2 and count % 30 == 0:
-# 			o.write(','.join(m[key1][0] + m[key2][0] + ['0']) + '\n')
+if __name__ == '__main__':
+	main()
